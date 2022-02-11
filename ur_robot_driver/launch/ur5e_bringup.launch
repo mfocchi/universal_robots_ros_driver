@@ -25,11 +25,9 @@
 
 
 
+   <arg name="gazebo" default="false" doc="starts model that works with gazebo" />
 
-
-
-
-<!--IMPORTANT both sim and real robot call this same file!-->
+  <!--IMPORTANT both sim and real robot call this same file!-->
   <arg name="robot_description_file" default="$(find ur_description)/launch/load_ur5e.launch" doc="Robot description launch file."/>
 
 
