@@ -50,48 +50,10 @@ class ContollerManager:
             rospy.logerr("Could not reach controller switch service. Msg: {}".format(err))
             sys.exit(-1)
 
-        self.joint_trajectory_controller =CONTROLLERS[0]
+        self.active_controller = CONTROLLERS[0]
 
         self.jointpub = rospy.Publisher('/'+CONTROLLERS[0]+'/command', Float64MultiArray, queue_size=10)
 
-
-
-    def send_joint_trajectory(self):
-        """Creates a trajectory and sends it using the selected action server"""
-
-        # make sure the correct controller is loaded and activated
-        self.switch_controller(self.joint_trajectory_controller)
-
-        #
-        # trajectory_client = actionlib.SimpleActionClient(
-        #     "{}/follow_joint_trajectory".format(self.joint_trajectory_controller),
-        #     FollowJointTrajectoryAction,
-        # )
-        #
-        # # Create and fill trajectory goal
-        # goal = FollowJointTrajectoryGoal()
-        # goal.trajectory.joint_names = JOINT_NAMES
-        #
-        # # The following list are arbitrary positions
-        # # Change to your own needs if desired
-        # position_list = [[0, -1.57, -1.57, 0, 0, 0]]
-        # position_list.append([0.2, -1.57, -1.57, 0, 0, 0])
-        # position_list.append([-0.5, -1.57, -1.2, 0, 0, 0])
-        # duration_list = [3.0, 7.0, 10.0]
-        # for i, position in enumerate(position_list):
-        #     point = JointTrajectoryPoint()
-        #     point.positions = position
-        #     point.time_from_start = rospy.Duration(duration_list[i])
-        #     goal.trajectory.points.append(point)
-        #
-        # rospy.loginfo("Executing trajectory using the {}".format(self.joint_trajectory_controller))
-        #
-        # trajectory_client.send_goal(goal)
-        # trajectory_client.wait_for_result()
-        #
-        # result = trajectory_client.get_result()
-        # rospy.loginfo("Trajectory execution finished in state {}".format(result.error_code))
-        #
 
 
 
@@ -115,7 +77,7 @@ class ContollerManager:
 if __name__ == "__main__":
     cmanager = ContollerManager()
 
-    cmanager.send_joint_trajectory()
+    cmanager.switch_controller(self.active_controller)
 
     rate = rospy.Rate(10)  # 10hz
     while not rospy.is_shutdown():
