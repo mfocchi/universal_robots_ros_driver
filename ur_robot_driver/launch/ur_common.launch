@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+
+  <arg name="robot_name" default="ur5" />
+
   <arg name="debug" default="false" doc="Debug flag that will get passed on to ur_control.launch"/>
   <arg name="use_tool_communication" doc="On e-Series robots tool communication can be enabled with this argument"/>
   <arg name="controller_config_file" doc="Config file used for defining the ROS-Control controllers."/>
@@ -28,9 +31,9 @@
     <arg name="kinematics_params" value="$(arg kinematics_config)"/>
   </include>
 
-  <!-- Convert joint states to /tf tranforms -->
+<group ns="$(arg robot_name)">
+    <!-- Convert joint states to /tf tranforms -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
-
   <include file="$(find ur_robot_driver)/launch/ur_control.launch">
     <arg name="debug" value="$(arg debug)"/>
     <arg name="use_tool_communication" value="$(arg use_tool_communication)"/>
@@ -54,4 +57,5 @@
     <arg name="tool_device_name" value="$(arg tool_device_name)"/>
     <arg name="tool_tcp_port" value="$(arg tool_tcp_port)"/>
   </include>
+</group>
 </launch>
