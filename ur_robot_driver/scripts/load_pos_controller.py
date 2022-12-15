@@ -30,7 +30,7 @@ JOINT_NAMES = [
     "wrist_3_joint",
 ]
 
-CONTROLLERS = ["joint_group_pos_controller", "joint_group_vel_controller"]
+CONTROLLERS = ["joint_group_pos_controller", "joint_group_vel_controller","scaled_pos_joint_traj_controller"]
 
 class ContollerManager:
     """Small trajectory client to test a joint trajectory"""
@@ -40,9 +40,9 @@ class ContollerManager:
 
         timeout = rospy.Duration(5)
         self.switch_controller_srv = rospy.ServiceProxy(
-            "controller_manager/switch_controller", SwitchController
+            "/ur5/controller_manager/switch_controller", SwitchController
         )
-        self.load_controller_srv = rospy.ServiceProxy("controller_manager/load_controller", LoadController)
+        self.load_controller_srv = rospy.ServiceProxy("/ur5/controller_manager/load_controller", LoadController)
 
         try:
             self.switch_controller_srv.wait_for_service(timeout.to_sec())
@@ -52,7 +52,7 @@ class ContollerManager:
 
         self.active_controller = CONTROLLERS[0]
 
-        self.jointpub = rospy.Publisher('/'+CONTROLLERS[0]+'/command', Float64MultiArray, queue_size=10)
+        self.jointpub = rospy.Publisher('/ur5/'+CONTROLLERS[0]+'/command', Float64MultiArray, queue_size=10)
 
 
 
@@ -77,13 +77,15 @@ class ContollerManager:
 if __name__ == "__main__":
     cmanager = ContollerManager()
 
-    cmanager.switch_controller(self.active_controller)
+    cmanager.switch_controller(cmanager.active_controller)
 
     rate = rospy.Rate(10)  # 10hz
     while not rospy.is_shutdown():
         msg = Float64MultiArray()
-        msg.data = [0.0, -0.4, 0.5, -1.5, 0.0, -0.5]
-        rospy.loginfo( msg.data)
+        #msg.data = [0.0, -0.4, 0.5, -1.5, 0.0, -0.5]
+        msg.data = [3.969757080078125 +0.6, -0.5977658194354554,  -2.526026487350464, -0.5901497763446351, -0.36137134233583623, 2.2153096199035645]
+
+        #rospy.loginfo( msg.data)
         cmanager.jointpub.publish(msg)
         rate.sleep()
         if rospy.is_shutdown():
