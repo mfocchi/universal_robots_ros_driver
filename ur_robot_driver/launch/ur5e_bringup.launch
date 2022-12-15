@@ -31,5 +31,12 @@
   <arg name="robot_description_file" default="$(find ur_description)/launch/upload.launch" doc="Robot description launch file."/>
 
 
+  
+  <!--launch the driver-->
   <include file="$(find ur_robot_driver)/launch/ur_common.launch" pass_all_args="true" />
+  
+  
+  <!--launch the zed camera driver!-->
+  <include file="$(find ur_description)/sensors/zed2/real/zed2.launch" />
+  
 </launch>
