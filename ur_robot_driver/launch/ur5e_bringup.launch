@@ -27,6 +27,7 @@
   <arg name="robot_name" default="ur5" />
   <arg name="gazebo" default="false" doc="starts model that works with gazebo" />
   <arg name="vision_sensor" default="true" />
+  <arg name="soft_gripper" default="false" />
 
   <!--IMPORTANT both sim and real robot call this same file!-->
   <arg name="robot_description_file" default="$(find ur_description)/launch/upload.launch" doc="Robot description launch file."/>
@@ -38,7 +39,7 @@
   
   
   <!--launch the zed camera driver!-->  
-  <group unless="$(arg vision_sensor)">
+  <group if="$(arg vision_sensor)">
   	<include file="$(find ur_description)/sensors/zed2/real/zed2.launch" />
   </group>
 </launch>
